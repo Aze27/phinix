@@ -36,6 +36,27 @@ except FileNotFoundError:
 if not tokens:
     print("Please add your tokens in the tokens.txt file. It was found to be empty")
     prs_key = True
+
+print(f"\n{Fore.BLUE}Loading Tokens.\n{Fore.GREEN}")
+
+for token in tokens:
+
+    header = {"authorization": token}
+    response = requests.get("https://discord.com/api/users/@me",
+                            headers=header)
+
+    if response.status_code == 200:
+      data = response.json()
+      account_name = f"{data['username']}#{data['discriminator']}"
+      print(f"Loaded token : {account_name}")
+    else:
+        print("Invalid token : ",token)
+        prs_key = True
+if prs_key == False:
+    print(f"{Fore.LIGHTYELLOW_EX}Loaded {len(tokens)} tokens.")
+
+
+
 try:
     with open("config.json", "r") as f:
         config = json.load(f)
